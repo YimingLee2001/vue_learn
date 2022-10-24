@@ -1,18 +1,20 @@
 <template>
   <div class="login-container">
-    <el-form ref="formRef" :model="form" class="login-form">
+    <el-form ref="formRef" :model="form" class="login-form" :rules="rules">
       <div class="title-container">
         <h3 class="title">用户登录</h3>
       </div>
-      <el-form-item>
+      <el-form-item prop="username">
         <el-icon :size="20" class="svg-container"><User /></el-icon>
-        <el-input v-model="form.name" />
+        <el-input v-model="form.username" />
       </el-form-item>
-      <el-form-item>
+      <el-form-item prop="password">
         <el-icon :size="20" class="svg-container"><Lock /></el-icon>
-        <el-input v-model="form.password" />
+        <el-input v-model="form.password" type="password" show-password />
       </el-form-item>
-      <el-button type="primary" class="login-button">登录</el-button>
+      <el-button type="primary" class="login-button" @click="handlelogin"
+        >登录</el-button
+      >
     </el-form>
   </div>
 </template>
@@ -20,10 +22,44 @@
 <script setup>
 import { ref } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
+import { login } from '@/api/login'
+
 const form = ref({
-  name: '',
-  password: ''
+  username: 'admin',
+  password: '123456'
 })
+
+const rules = ref({
+  username: [
+    {
+      required: true,
+      message: 'Please input Activity name',
+      trigger: 'blur'
+    }
+  ],
+  password: [
+    {
+      required: true,
+      message: 'Please input Activity name',
+      trigger: 'blur'
+    }
+  ]
+})
+
+const formRef = ref(null)
+const handlelogin = () => {
+  formRef.value.validate(async (valid) => {
+    if (valid) {
+      // alert('submit!')
+      // await login(form.value)
+      const res = await login(form.value)
+      console.log(res)
+    } else {
+      console.log('error submit!!')
+      return false
+    }
+  })
+}
 </script>
 
 <style lang="scss" scoped>
@@ -46,14 +82,14 @@ $cursor: #fff;
     margin: 0 auto;
     overflow: hidden;
 
-    ::v-deep .el-form-item {
+    ::v-deep(.el-form-item) {
       border: 1px solid rgba(255, 255, 255, 0.1);
       background: rgba(0, 0, 0, 0.1);
       border-radius: 5px;
       color: #454545;
     }
 
-    ::v-deep .el-input {
+    ::v-deep(.el-input) {
       //   display: inline-block;
       height: 47px;
       width: 92%; // 这个值是我自己试出来的
@@ -106,7 +142,7 @@ $cursor: #fff;
       font-weight: bold;
     }
 
-    ::v-deep .lang-select {
+    ::v-deep(.lang-select) {
       position: absolute;
       top: 4px;
       right: 0;
