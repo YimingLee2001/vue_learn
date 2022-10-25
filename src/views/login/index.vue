@@ -22,7 +22,9 @@
 <script setup>
 import { ref } from 'vue'
 import { User, Lock } from '@element-plus/icons-vue'
-import { login } from '@/api/login'
+import { useStore } from 'vuex'
+
+const store = useStore()
 
 const form = ref({
   username: 'admin',
@@ -50,10 +52,7 @@ const formRef = ref(null)
 const handlelogin = () => {
   formRef.value.validate(async (valid) => {
     if (valid) {
-      // alert('submit!')
-      // await login(form.value)
-      const res = await login(form.value)
-      console.log(res)
+      store.dispatch('app/login', form.value)
     } else {
       console.log('error submit!!')
       return false
