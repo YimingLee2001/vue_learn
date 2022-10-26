@@ -1,5 +1,6 @@
 import { login as loginApi } from '@/api/login'
 import router from '@/router'
+import { setTokenTime } from '@/utils/auth'
 
 export default {
   namespaced: true,
@@ -19,6 +20,7 @@ export default {
           .then((res) => {
             console.log(res)
             commit('setToken', res.token)
+            setTokenTime()
             router.replace('/')
             resolve()
           })
@@ -26,6 +28,11 @@ export default {
             reject(err)
           })
       })
+    },
+    logout({ commit }) {
+      commit('setToken', '')
+      localStorage.clear()
+      router.replace('/login')
     }
   }
 }

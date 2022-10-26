@@ -46,7 +46,6 @@ const defaultActive = ref(sessionStorage.getItem('path') || '/users')
 const menusList = ref([])
 const initMenusList = async () => {
   menusList.value = await menuList()
-  //   console.log(res)
 }
 
 const savePath = (path) => {
