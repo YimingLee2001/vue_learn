@@ -7,8 +7,8 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue'
 import 'element-plus/dist/index.css'
 import '@/router/permission'
 
-const app = createApp(App).use(store).use(router)
+const app = createApp(App)
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)
 }
-app.mount('#app')
+app.use(store).use(router).mount('#app')

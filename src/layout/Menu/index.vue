@@ -1,22 +1,37 @@
 <template lang="">
   <el-menu
-    active-text-color="$menuActiveText"
+    active-text-color="#ffd04b"
     background-color="$menuBg"
     class="el-menu-vertical-demo"
-    default-active="2"
+    :default-active="defaultActive"
     text-color="#fff"
     router
+    unique-opened
   >
-    <el-sub-menu :index="item.id" v-for="item in menusList" :key="item.id">
+    <el-sub-menu
+      :index="item.id"
+      v-for="(item, index) in menusList"
+      :key="item.id"
+    >
       <template #title>
+        <el-icon>
+          <component :is="iconList[index]"></component>
+        </el-icon>
         <span>{{ item.authName }}</span>
       </template>
       <el-menu-item
         :index="'/' + it.path"
         v-for="it in item.children"
         :key="it.id"
-        >{{ it.authName }}</el-menu-item
+        @click="savePath(it.path)"
       >
+        <template #title>
+          <el-icon>
+            <component :is="icon"></component>
+          </el-icon>
+          <span>{{ it.authName }}</span>
+        </template>
+      </el-menu-item>
     </el-sub-menu>
   </el-menu>
 </template>
@@ -24,10 +39,18 @@
 import { menuList } from '@/api/menu'
 import { ref } from 'vue'
 
+const iconList = ref(['user', 'setting', 'shop', 'tickets', 'pie-chart'])
+const icon = ref('menu')
+
+const defaultActive = ref(sessionStorage.getItem('path') || '/users')
 const menusList = ref([])
 const initMenusList = async () => {
   menusList.value = await menuList()
   //   console.log(res)
+}
+
+const savePath = (path) => {
+  sessionStorage.setItem('path', `/${path}`)
 }
 initMenusList()
 </script>
