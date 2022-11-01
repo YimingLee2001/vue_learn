@@ -3,7 +3,9 @@
     <Hamburger />
     <Breadcrumb />
     <div class="navbar-right">
-      <Avatar />
+      <ScreenFull class="navbar-item" />
+      <Lang class="navbar-item" />
+      <Avatar class="navbar-item" />
     </div>
   </div>
 </template>
@@ -11,6 +13,8 @@
 import Hamburger from './components/hamburger.vue'
 import Breadcrumb from './components/breadcrumb.vue'
 import Avatar from './components/avatar.vue'
+import Lang from './components/lang.vue'
+import ScreenFull from './components/screenFull.vue'
 </script>
 
 <style lang="scss" scoped>
@@ -30,7 +34,8 @@ import Avatar from './components/avatar.vue'
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    ::v-deep .navbar-item {
+
+    ::v-deep(.navbar-item) {
       display: inline-block;
       margin-left: 18px;
       font-size: 22px;
