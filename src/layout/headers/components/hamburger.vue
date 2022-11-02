@@ -1,5 +1,5 @@
 <template>
-  <div class="hamburger-container" @click="toggleClick">
+  <div class="hamburger-container" @click="toggleClick" id="hamburger">
     <el-icon v-if="siderState"><Fold /></el-icon>
     <el-icon v-else><Expand /></el-icon>
   </div>

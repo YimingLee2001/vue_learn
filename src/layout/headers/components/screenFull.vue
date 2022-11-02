@@ -1,5 +1,5 @@
 <template>
-  <div @click="handleFullScreen">
+  <div @click="handleFullScreen" id="screenFull">
     <el-icon v-if="!isFull"><FullScreen /></el-icon>
     <el-icon v-else><Crop /></el-icon>
   </div>
