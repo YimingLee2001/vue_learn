@@ -11,7 +11,9 @@
       <el-button type="primary" :icon="Search" @click="initGetUsersList">{{
         $t('table.search')
       }}</el-button>
-      <el-button type="primary">{{ $t('table.adduser') }}</el-button>
+      <el-button type="primary" @click="handlerDialogValue">{{
+        $t('table.adduser')
+      }}</el-button>
     </el-row>
 
     <el-table :data="tableData" stripe style="width: 100%">
@@ -22,7 +24,7 @@
         v-for="(item, index) in options"
         :key="index"
         ><template v-slot="{ row }" v-if="item.prop === 'mg_state'"
-          ><el-switch v-model="row.mg_state"
+          ><el-switch v-model="row.mg_state" @change="changeState(row)"
         /></template>
         <template v-slot="{ row }" v-else-if="item.prop === 'create_time'">
           {{ $filters.filterTimes(row.create_time) }}
@@ -47,14 +49,25 @@
       @current-change="handleCurrentChange"
     />
   </el-card>
+  <Dialog
+    v-model="dialogVisible"
+    :dialogTitle="dialogTitle"
+    v-if="dialogVisible"
+  />
 </template>
 
 <script setup>
 import { ref } from 'vue'
 import { Search, Edit, Setting, Delete } from '@element-plus/icons-vue'
-import { getUsers } from '@/api/users'
+import { getUsers, changeUserState } from '@/api/users'
 import { options } from './options'
+import { ElMessage } from 'element-plus'
+import { useI18n } from 'vue-i18n'
+import Dialog from './components/dialog.vue'
 
+const i18n = useI18n()
+const dialogVisible = ref(false)
+const dialogTitle = ref('')
 const total = ref(0)
 
 const queryForm = ref({
@@ -82,6 +95,19 @@ const handleSizeChange = (pageSize) => {
 const handleCurrentChange = (pageNum) => {
   queryForm.value.pagenum = pageNum
   initGetUsersList()
+}
+
+const changeState = async (info) => {
+  await changeUserState(info.id, info.mg_state)
+  ElMessage({
+    message: i18n.t('message.updeteSuccess'),
+    type: 'success'
+  })
+}
+
+const handlerDialogValue = () => {
+  dialogTitle.value = '添加用户'
+  dialogVisible.value = true
 }
 </script>
 <style lang="scss" scoped>
